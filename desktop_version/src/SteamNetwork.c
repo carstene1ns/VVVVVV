@@ -15,6 +15,8 @@
 #define STEAM_LIBRARY "libsteam_api.dylib"
 #elif defined(__linux__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
 #define STEAM_LIBRARY "libsteam_api.so"
+#elif defined(__SWITCH__)
+#define STEAM_LIBRARY "no.steam"
 #else
 #error STEAM_LIBRARY: Unrecognized platform!
 #endif
@@ -95,7 +97,7 @@ static void ClearPointers()
 
 int32_t STEAM_init()
 {
-#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__HAIKU__) || defined(__SWITCH__)
 	return 0;
 #endif
 	intptr_t steamClient;

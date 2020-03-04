@@ -27,6 +27,10 @@ static NetworkBackend backends[NUM_BACKENDS];
 
 int NETWORK_init()
 {
+#ifdef __SWITCH__
+	return 0;
+#endif
+
 	int32_t i, any = 0;
 	#define ASSIGN_BACKEND(name, index) \
 		backends[index].Init = name##_init; \

@@ -23,7 +23,11 @@ Screen::Screen()
     m_renderer = NULL;
     m_screenTexture = NULL;
     m_screen = NULL;
+#ifdef __SWITCH__
+    isWindowed = false;
+#else
     isWindowed = true;
+#endif
     stretchMode = 0;
     isFiltered = false;
     filterSubrect.x = 1;
@@ -37,7 +41,11 @@ Screen::Screen()
 	SDL_CreateWindowAndRenderer(
 		640,
 		480,
+#ifdef __SWITCH__
+		SDL_WINDOW_FULLSCREEN_DESKTOP,
+#else
 		SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE,
+#endif
 		&m_window,
 		&m_renderer
 	);
@@ -182,7 +190,9 @@ void Screen::FlipScreen()
 
 void Screen::toggleFullScreen()
 {
+#ifndef __SWITCH__
 	isWindowed = !isWindowed;
+#endif
 	ResizeScreen(-1, -1);
 }
 

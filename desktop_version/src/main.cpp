@@ -29,6 +29,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef __SWITCH__
+#include <switch.h>
+#endif
+
 scriptclass script;
 
 #if !defined(NO_CUSTOM_LEVELS)
@@ -43,6 +47,28 @@ Game game;
 KeyPoll key;
 mapclass map;
 entityclass obj;
+
+#ifdef __SWITCH__
+int nxlinkSocket = -1;
+
+extern "C" void userAppInit() {
+    if (R_FAILED(socketInitializeDefault()))
+        return;
+
+    nxlinkSocket = nxlinkStdio();
+    if (nxlinkSocket < 0)
+        socketExit();
+}
+
+extern "C" void userAppExit() {
+    if (nxlinkSocket >= 0) {
+        close(nxlinkSocket);
+        socketExit();
+        nxlinkSocket = -1;
+    }
+}
+
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -62,17 +88,18 @@ int main(int argc, char *argv[])
         }
     }
 
-    if(!FILESYSTEM_init(argv[0], baseDir, assetsPath))
-    {
-        return 1;
-    }
-
     SDL_Init(
         SDL_INIT_VIDEO |
         SDL_INIT_AUDIO |
         SDL_INIT_JOYSTICK |
         SDL_INIT_GAMECONTROLLER
     );
+
+    if(!FILESYSTEM_init(argv[0], baseDir, assetsPath))
+    {
+        SDL_Quit();
+        return 1;
+    }
 
     NETWORK_init();
 

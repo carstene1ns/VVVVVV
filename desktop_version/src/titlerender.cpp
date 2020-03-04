@@ -49,6 +49,9 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
 					dwgfx.Print(-1,temp+35,"     MAKE AND PLAY EDITION",tr, tg, tb, true);
 				#endif
 
+        dwgfx.Print(5, 120, "Unofficial Nintendo Switch Port", tr, tg, tb, true);
+        dwgfx.Print(5, 130, "by carstene1ns 03/2020", tr, tg, tb, true);
+
         dwgfx.Print(5, 175, "[ Press ACTION to Start ]", tr, tg, tb, true);
         dwgfx.Print(5, 195, "ACTION = Space, Z, or V", int(tr*0.5f), int(tg*0.5f), int(tb*0.5f), true);
 
