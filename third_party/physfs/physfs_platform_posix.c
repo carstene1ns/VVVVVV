@@ -25,7 +25,6 @@
 
 #include "physfs_internal.h"
 
-
 static PHYSFS_ErrorCode errcodeFromErrnoError(const int err)
 {
     switch (err)
@@ -57,6 +56,7 @@ static inline PHYSFS_ErrorCode errcodeFromErrno(void)
     return errcodeFromErrnoError(errno);
 } /* errcodeFromErrno */
 
+#ifndef GEKKO
 
 static char *getUserDirByUID(void)
 {
@@ -84,6 +84,7 @@ static char *getUserDirByUID(void)
     return retval;
 } /* getUserDirByUID */
 
+#endif
 
 char *__PHYSFS_platformCalcUserDir(void)
 {
@@ -98,8 +99,8 @@ char *__PHYSFS_platformCalcUserDir(void)
         {
             const size_t envrlen = strlen(envr);
             const size_t add_dirsep = (envr[envrlen-1] != '/') ? 1 : 0;
-            retval = allocator.Malloc(envrlen + 1 + add_dirsep);
-            if (retval)
+            retval = (char *) allocator.Malloc(envrlen + 1 + add_dirsep);
+            if (retval != NULL)
             {
                 strcpy(retval, envr);
                 if (add_dirsep)
@@ -111,8 +112,10 @@ char *__PHYSFS_platformCalcUserDir(void)
         } /* if */
     } /* if */
 
+#ifndef GEKKO
     if (retval == NULL)
         retval = getUserDirByUID();
+#endif
 
     return retval;
 } /* __PHYSFS_platformCalcUserDir */
@@ -335,13 +338,22 @@ int __PHYSFS_platformStat(const char *fname, PHYSFS_Stat *st, const int follow)
 } /* __PHYSFS_platformStat */
 
 
+#ifdef GEKKO
+
+void *__PHYSFS_platformGetThreadID(void) { return ((void *) 0x0001); }
+void *__PHYSFS_platformCreateMutex(void) { return ((void *) 0x0001); }
+void __PHYSFS_platformDestroyMutex(void *mutex) {}
+int __PHYSFS_platformGrabMutex(void *mutex) { return (1); }
+void __PHYSFS_platformReleaseMutex(void *mutex) {}
+
+#else
+
 typedef struct
 {
     pthread_mutex_t mutex;
     pthread_t owner;
     PHYSFS_uint32 count;
 } PthreadMutex;
-
 
 void *__PHYSFS_platformGetThreadID(void)
 {
@@ -410,6 +422,7 @@ void __PHYSFS_platformReleaseMutex(void *mutex)
         } /* if */
     } /* if */
 } /* __PHYSFS_platformReleaseMutex */
+#endif
 
 #endif  /* PHYSFS_PLATFORM_POSIX */
 

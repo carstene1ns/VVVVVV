@@ -5,7 +5,7 @@
 	extern int32_t name##_init(); \
 	extern void name##_shutdown(); \
 	extern void name##_update(); \
-	extern void name##_unlockAchievement(); \
+	extern void name##_unlockAchievement(const char *name); \
 	extern int32_t name##_getAchievementProgress(const char *name); \
 	extern void name##_setAchievementProgress(const char *name, int32_t stat);
 DECLARE_BACKEND(STEAM)
@@ -18,7 +18,7 @@ typedef struct NetworkBackend
 	int32_t (*Init)();
 	void (*Shutdown)();
 	void (*Update)();
-	void (*UnlockAchievement)();
+	void (*UnlockAchievement)(const char *name);
 	int32_t (*GetAchievementProgress)(const char*);
 	void (*SetAchievementProgress)(const char*, int32_t);
 } NetworkBackend;
@@ -27,6 +27,8 @@ static NetworkBackend backends[NUM_BACKENDS];
 
 int NETWORK_init()
 {
+	return 0;
+
 	int32_t i, any = 0;
 	#define ASSIGN_BACKEND(name, index) \
 		backends[index].Init = name##_init; \

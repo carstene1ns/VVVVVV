@@ -37,6 +37,7 @@ const char* BoolToString(bool _b)
     }
 }
 
+/*
 bool GetButtonFromString(const char *pText, SDL_GameControllerButton *button)
 {
 	if (	*pText == '0' ||
@@ -111,7 +112,7 @@ bool GetButtonFromString(const char *pText, SDL_GameControllerButton *button)
 	}
 	return false;
 }
-
+*/
 
 void Game::init(void)
 {
@@ -4464,7 +4465,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
         {
             dwgfx.showmousecursor = atoi(pText);
         }
-
+/*
 		if (pKey == "flipButton")
 		{
 			SDL_GameControllerButton newButton;
@@ -4491,7 +4492,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
 				controllerButton_esc.push_back(newButton);
 			}
 		}
-
+*/
 		if (pKey == "controllerSensitivity")
 		{
 			controllerSensitivity = atoi(pText);
@@ -4521,6 +4522,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
         SDL_ShowCursor(SDL_DISABLE);
     }
 
+/*
     if (controllerButton_flip.size() < 1)
     {
         controllerButton_flip.push_back(SDL_CONTROLLER_BUTTON_A);
@@ -4533,6 +4535,7 @@ void Game::loadstats( mapclass& map, Graphics& dwgfx )
     {
         controllerButton_esc.push_back(SDL_CONTROLLER_BUTTON_B);
     }
+*/
 }
 
 void Game::savestats( mapclass& _map, Graphics& _dwgfx )
@@ -4694,6 +4697,7 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
     msg->LinkEndChild(new TiXmlText(tu.String((int)_dwgfx.showmousecursor).c_str()));
     dataNode->LinkEndChild(msg);
 
+/*
     for (size_t i = 0; i < controllerButton_flip.size(); i += 1)
     {
         msg = new TiXmlElement("flipButton");
@@ -4712,6 +4716,7 @@ void Game::savestats( mapclass& _map, Graphics& _dwgfx )
         msg->LinkEndChild(new TiXmlText(tu.String((int) controllerButton_esc[i]).c_str()));
         dataNode->LinkEndChild(msg);
     }
+*/
 
 	msg = new TiXmlElement( "controllerSensitivity" );
 	msg->LinkEndChild( new TiXmlText( tu.String(controllerSensitivity).c_str()));

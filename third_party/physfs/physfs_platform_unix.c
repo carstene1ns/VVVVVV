@@ -147,7 +147,7 @@ void __PHYSFS_platformDetectAvailableCDs(PHYSFS_StringCallback cb, void *data)
 #endif
 } /* __PHYSFS_platformDetectAvailableCDs */
 
-
+#ifndef GEKKO
 /*
  * See where program (bin) resides in the $PATH specified by (envr).
  *  returns a copy of the first element in envr that contains it, or NULL
@@ -213,7 +213,6 @@ static char *findBinaryInPath(const char *bin, char *envr)
     return NULL;  /* doesn't exist in path. */
 } /* findBinaryInPath */
 
-
 static char *readSymLink(const char *path)
 {
     ssize_t len = 64;
@@ -245,9 +244,31 @@ static char *readSymLink(const char *path)
     return NULL;
 } /* readSymLink */
 
+#endif
 
 char *__PHYSFS_platformCalcBaseDir(const char *argv0)
 {
+#ifdef GEKKO
+
+    // set the default path if libfat couldnt set it
+    // this allows loading over tcp/usbgecko
+    char *cwd = (char *) allocator.Malloc(MAXPATHLEN);
+    BAIL_IF(cwd == NULL, PHYSFS_ERR_OUT_OF_MEMORY, NULL);
+
+    if (getcwd(cwd, MAXPATHLEN)) {
+        size_t len = strlen(cwd);
+
+        if (len > 2 && (cwd[len - 1] == ':' || cwd[len - 2] == ':')) {
+            chdir("/");
+            cwd[0] = '/';
+            cwd[1] = '\0';
+        }
+    }
+
+    return (cwd);
+
+#else
+
     char *retval = NULL;
     const char *envr = NULL;
 
@@ -329,6 +350,8 @@ char *__PHYSFS_platformCalcBaseDir(const char *argv0)
     } /* if */
 
     return retval;
+
+#endif
 } /* __PHYSFS_platformCalcBaseDir */
 
 

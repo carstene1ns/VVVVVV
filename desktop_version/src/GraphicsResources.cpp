@@ -1,5 +1,6 @@
 #include "GraphicsResources.h"
 #include "FileSystemUtils.h"
+#include "Graphics.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -26,8 +27,6 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha =
 {
 	//Temporary storage for the image that's loaded
 	SDL_Surface* loadedImage = NULL;
-	//The optimized image that will be used
-	SDL_Surface* optimizedImage = NULL;
 
 	unsigned char *data;
 	unsigned int width, height;
@@ -59,23 +58,20 @@ SDL_Surface* LoadImage(const char *filename, bool noBlend = true, bool noAlpha =
 
 	if (loadedImage != NULL)
 	{
-		optimizedImage = SDL_ConvertSurfaceFormat(
-			loadedImage,
-			SDL_PIXELFORMAT_ABGR8888, // FIXME: Format? -flibit
-			0
-		);
-		SDL_FreeSurface( loadedImage );
-		free(data);
 		if (noBlend)
 		{
-			SDL_SetSurfaceBlendMode(optimizedImage, SDL_BLENDMODE_BLEND);
+			SDL_SetAlpha(loadedImage, 0, 0);
 		}
-		return optimizedImage;
+
+		//optimizedImage = SDL_DisplayFormatAlpha(loadedImage);
+
+		free(data);
+		return loadedImage;
 	}
 	else
 	{
 		fprintf(stderr,"Image not found: %s\n", filename);
-		SDL_assert(0 && "Image not found! See stderr.");
+		assert(0 && "Image not found! See stderr.");
 		return NULL;
 	}
 }

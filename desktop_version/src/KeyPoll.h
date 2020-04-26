@@ -7,31 +7,28 @@
 
 #include "SDL.h"
 
-enum Kybrd
-{
-	KEYBOARD_UP = SDLK_UP,
-	KEYBOARD_DOWN = SDLK_DOWN,
-	KEYBOARD_LEFT = SDLK_LEFT,
-	KEYBOARD_RIGHT = SDLK_RIGHT,
-	KEYBOARD_ENTER = SDLK_RETURN,
-	KEYBOARD_SPACE = SDLK_SPACE,
+#define KEYBOARD_UP SDLK_UP
+#define KEYBOARD_DOWN SDLK_DOWN
+#define KEYBOARD_LEFT SDLK_LEFT
+#define KEYBOARD_RIGHT SDLK_RIGHT
+#define KEYBOARD_ENTER SDLK_RETURN
+#define KEYBOARD_SPACE SDLK_SPACE
 
-	KEYBOARD_w = SDLK_w,
-	KEYBOARD_s = SDLK_s,
-	KEYBOARD_a = SDLK_a,
-	KEYBOARD_d = SDLK_d,
-	KEYBOARD_m = SDLK_m,
+#define KEYBOARD_w SDLK_w
+#define KEYBOARD_s SDLK_s
+#define KEYBOARD_a SDLK_a
+#define KEYBOARD_d SDLK_d
+#define KEYBOARD_m SDLK_m
 
-	KEYBOARD_v = SDLK_v,
-	KEYBOARD_z = SDLK_z,
+#define KEYBOARD_v SDLK_v
+#define KEYBOARD_z SDLK_z
 
-	KEYBOARD_BACKSPACE = SDLK_BACKSPACE
-};
+#define KEYBOARD_BACKSPACE = SDLK_BACKSPACE
 
 class KeyPoll
 {
 public:
-	std::map<SDL_Keycode, bool> keymap;
+	std::map<SDLKey, bool> keymap;
 
 	bool isActive;
 
@@ -53,13 +50,15 @@ public:
 
 	void Poll();
 
-	bool isDown(SDL_Keycode key);
+	bool isDown(SDLKey key);
 
-	bool isUp(SDL_Keycode key);
+	bool isUp(SDLKey key);
 
+/*
 	bool isDown(std::vector<SDL_GameControllerButton> buttons);
 	bool isDown(SDL_GameControllerButton button);
 	bool controllerButtonDown();
+*/
 	bool controllerWantsLeft(bool includeVert);
 	bool controllerWantsRight(bool includeVert);
 
@@ -74,8 +73,10 @@ public:
 	bool linealreadyemptykludge;
 
 private:
+/*
 	std::map<SDL_JoystickID, SDL_GameController*> controllers;
 	std::map<SDL_GameControllerButton, bool> buttonmap;
+*/
 	int xVel, yVel;
 	bool useFullscreenSpaces;
 	Uint32 wasFullscreen;

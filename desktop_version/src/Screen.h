@@ -15,7 +15,7 @@ public:
 	void ClearScreen(int colour);
 	void FlipScreen();
 
-	const SDL_PixelFormat* GetFormat();
+	SDL_PixelFormat* GetFormat();
 
 	void toggleFullScreen();
 	void toggleStretchMode();
@@ -27,9 +27,12 @@ public:
 	bool glScreen;
 	int stretchMode;
 
+/*
 	SDL_Window *m_window;
 	SDL_Renderer *m_renderer;
 	SDL_Texture *m_screenTexture;
+*/
+
 	SDL_Surface* m_screen;
 
 	SDL_Rect filterSubrect;

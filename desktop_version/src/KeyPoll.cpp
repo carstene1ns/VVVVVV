@@ -42,6 +42,7 @@ KeyPoll::KeyPoll()
 	pressedbackspace=false;
 
 	useFullscreenSpaces = false;
+#if 0
 	if (strcmp(SDL_GetPlatform(), "Mac OS X") == 0)
 	{
 		useFullscreenSpaces = true;
@@ -51,6 +52,7 @@ KeyPoll::KeyPoll()
 			useFullscreenSpaces = (strcmp(hint, "1") == 0);
 		}
 	}
+#endif
 
 	linealreadyemptykludge = false;
 }
@@ -59,13 +61,13 @@ void KeyPoll::enabletextentry()
 {
 	keybuffer="";
 	textentrymode = true;
-	SDL_StartTextInput();
+	//SDL_StartTextInput();
 }
 
 void KeyPoll::disabletextentry()
 {
 	textentrymode = false;
-	SDL_StopTextInput();
+	//SDL_StopTextInput();
 }
 
 void KeyPoll::Poll()
@@ -108,7 +110,7 @@ void KeyPoll::Poll()
 				else if (	evt.key.keysym.sym == SDLK_v &&
 						keymap[SDLK_LCTRL]	)
 				{
-					keybuffer += SDL_GetClipboardText();
+					//keybuffer += SDL_GetClipboardText();
 				}
 			}
 		}
@@ -120,11 +122,12 @@ void KeyPoll::Poll()
 				pressedbackspace = false;
 			}
 		}
+#if 0
 		else if (evt.type == SDL_TEXTINPUT)
 		{
 			keybuffer += evt.text.text;
 		}
-
+#endif
 		/* Mouse Input */
 		else if (evt.type == SDL_MOUSEMOTION)
 		{
@@ -174,6 +177,7 @@ void KeyPoll::Poll()
 			}
 		}
 
+#if 0
 		/* Controller Input */
 		else if (evt.type == SDL_CONTROLLERBUTTONDOWN)
 		{
@@ -272,6 +276,7 @@ void KeyPoll::Poll()
 				SDL_EnableScreenSaver();
 			}
 		}
+#endif
 
 		/* Quit Event */
 		else if (evt.type == SDL_QUIT)
@@ -281,16 +286,17 @@ void KeyPoll::Poll()
 	}
 }
 
-bool KeyPoll::isDown(SDL_Keycode key)
+bool KeyPoll::isDown(SDLKey key)
 {
 	return keymap[key];
 }
 
-bool KeyPoll::isUp(SDL_Keycode key)
+bool KeyPoll::isUp(SDLKey key)
 {
 	return !keymap[key];
 }
 
+#if 0
 bool KeyPoll::isDown(std::vector<SDL_GameControllerButton> buttons)
 {
 	for (size_t i = 0; i < buttons.size(); i += 1)
@@ -339,4 +345,13 @@ bool KeyPoll::controllerWantsRight(bool includeVert)
 			(	includeVert &&
 				(	buttonmap[SDL_CONTROLLER_BUTTON_DPAD_DOWN] ||
 					yVel > 0	)	)	);
+}
+#endif
+bool KeyPoll::controllerWantsLeft(bool includeVert)
+{
+	return false;
+}
+bool KeyPoll::controllerWantsRight(bool includeVert)
+{
+	return false;
 }

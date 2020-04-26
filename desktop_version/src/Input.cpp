@@ -12,6 +12,7 @@ extern scriptclass script;
 // Found in titlerender.cpp
 void updategraphicsmode(Game& game, Graphics& dwgfx);
 
+/*
 void updatebuttonmappings(Game& game, KeyPoll& key, musicclass& music, int bind)
 {
 	for (
@@ -112,6 +113,7 @@ void updatebuttonmappings(Game& game, KeyPoll& key, musicclass& music, int bind)
 		}
 	}
 }
+*/
 
 void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, musicclass& music)
 {
@@ -143,7 +145,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
             game.press_right = true;
 		}
     }
-    if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) || key.isDown(game.controllerButton_flip)) game.press_action = true;
+    if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) /*|| key.isDown(game.controllerButton_flip)*/) game.press_action = true;
     //|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.press_action = true; //on menus, up and down don't work as action
     if (key.isDown(KEYBOARD_ENTER)) game.press_map = true;
 
@@ -194,7 +196,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
         }
         */
 
-        if (key.isDown(27) && game.currentmenuname != "youwannaquit" && game.menustart)
+        if (key.isDown(SDLK_ESCAPE) && game.currentmenuname != "youwannaquit" && game.menustart)
         {
             music.playef(11, 10);
             game.previousmenuname = game.currentmenuname;
@@ -474,7 +476,7 @@ void titleinput(KeyPoll& key, Graphics& dwgfx, mapclass& map, Game& game, entity
                     //This code should:
                     // - Minimise the game
                     // - Open the levels folder for whatever operating system we're on
-SDL_assert(0 && "Remove open level dir");
+assert(0 && "Remove open level dir");
 
                   }*/else if(game.currentmenuoption==2){
                     //back
@@ -1784,6 +1786,7 @@ SDL_assert(0 && "Remove open level dir");
                 }
             }
         }
+/*
         if (    game.currentmenuname == "controller" &&
                 game.currentmenuoption > 0 &&
                 game.currentmenuoption < 4 &&
@@ -1791,7 +1794,7 @@ SDL_assert(0 && "Remove open level dir");
         {
             updatebuttonmappings(game, key, music, game.currentmenuoption);
         }
-
+*/
     }
 
     if (dwgfx.fademode == 1)
@@ -1882,11 +1885,11 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 game.press_right = true;
             }
             if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
-                    || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_w) || key.isDown(KEYBOARD_s)|| key.isDown(game.controllerButton_flip))
+                    || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_w) || key.isDown(KEYBOARD_s)/*|| key.isDown(game.controllerButton_flip)*/)
             {
                 game.press_action = true;
             };
-			if (key.isDown(KEYBOARD_ENTER) || key.isDown(SDLK_KP_ENTER) || key.isDown(game.controllerButton_map)  )
+			if (key.isDown(KEYBOARD_ENTER) || key.isDown(SDLK_KP_ENTER) /*|| key.isDown(game.controllerButton_map)*/  )
 			{
 				game.press_map = true;
 			}
@@ -1899,7 +1902,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
         {
             game.press_action = false;
             if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
-                    || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_w) || key.isDown(KEYBOARD_s) || key.isDown(game.controllerButton_flip)) game.press_action = true;
+                    || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN) || key.isDown(KEYBOARD_w) || key.isDown(KEYBOARD_s) /*|| key.isDown(game.controllerButton_flip)*/) game.press_action = true;
         }
 
         if (game.press_action && !game.jumpheld)
@@ -1964,7 +1967,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     //Returning to editor mode must always be possible
 #if !defined(NO_CUSTOM_LEVELS)
     if(map.custommode && !map.custommodeforreal){
-      if ((game.press_map || key.isDown(27)) && !game.mapheld){
+      if ((game.press_map || key.isDown(SDLK_ESCAPE)) && !game.mapheld){
         game.mapheld = true;
         //Return to level editor
         if (game.activeactivity > -1 && game.press_map){
@@ -2014,7 +2017,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 }
                 */
                 /*
-                if (key.isDown(27)) {
+                if (key.isDown(SDLK_ESCAPE)) {
                 game.state = 0;
                 dwgfx.textboxremove();
 
@@ -2145,7 +2148,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                     }
                 }
 
-                if ((key.isDown(27) || key.isDown(game.controllerButton_esc)) && (!map.custommode || map.custommodeforreal))
+                if ((key.isDown(SDLK_ESCAPE)/* || key.isDown(game.controllerButton_esc)*/) && (!map.custommode || map.custommodeforreal))
                 {
                     game.mapheld = true;
                     //Quit menu, same conditions as in game menu
@@ -2297,14 +2300,14 @@ void mapinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                 game.press_right = true;
             }
         }
-        if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) || key.isDown(game.controllerButton_flip))
+        if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) /*|| key.isDown(game.controllerButton_flip)*/)
         {
             game.press_action = true;
         }
         if (game.menupage < 9)
         {
-            if (key.isDown(KEYBOARD_ENTER) || key.isDown(game.controllerButton_map) ) game.press_map = true;
-            if (key.isDown(27))
+            if (key.isDown(KEYBOARD_ENTER) /*|| key.isDown(game.controllerButton_map)*/ ) game.press_map = true;
+            if (key.isDown(SDLK_ESCAPE))
             {
                 game.mapheld = true;
                 game.menupage = 10;
@@ -2312,7 +2315,7 @@ void mapinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
         }
         else
         {
-            if (key.isDown(KEYBOARD_ENTER) || key.isDown(27)|| key.isDown(game.controllerButton_map) ) game.press_map = true;
+            if (key.isDown(KEYBOARD_ENTER) || key.isDown(SDLK_ESCAPE)/*|| key.isDown(game.controllerButton_map)*/ ) game.press_map = true;
         }
 
         //In the menu system, all keypresses are single taps rather than holds. Therefore this test has to be done for all presses
@@ -2320,7 +2323,7 @@ void mapinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
         {
             game.jumpheld = false;
         }
-        if (!game.press_map && !key.isDown(27))
+        if (!game.press_map && !key.isDown(SDLK_ESCAPE))
         {
             game.mapheld = false;
         }
@@ -2490,8 +2493,8 @@ void teleporterinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
         if (key.isDown(KEYBOARD_LEFT)|| key.isDown(KEYBOARD_a) || key.controllerWantsLeft(false) ) game.press_left = true;
         if (key.isDown(KEYBOARD_RIGHT) || key.isDown(KEYBOARD_d)|| key.controllerWantsRight(false) ) game.press_right = true;
         if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
-                || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)||  key.isDown(KEYBOARD_w)||  key.isDown(KEYBOARD_s) || key.isDown(game.controllerButton_flip)) game.press_action = true;
-        if (key.isDown(KEYBOARD_ENTER) || key.isDown(game.controllerButton_map)) game.press_map = true;
+                || key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)||  key.isDown(KEYBOARD_w)||  key.isDown(KEYBOARD_s) /*|| key.isDown(game.controllerButton_flip)*/) game.press_action = true;
+        if (key.isDown(KEYBOARD_ENTER) /*|| key.isDown(game.controllerButton_map)*/) game.press_map = true;
 
         //In the menu system, all keypresses are single taps rather than holds. Therefore this test has to be done for all presses
         if (!game.press_action && !game.press_left && !game.press_right) game.jumpheld = false;
@@ -2585,7 +2588,7 @@ void gamecompleteinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
     game.press_action = false;
     game.press_map = false;
 
-    if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) || key.isDown(game.controllerButton_flip))
+    if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) /*|| key.isDown(game.controllerButton_flip)*/)
     {
         game.creditposition -= 6;
         if (game.creditposition <= -game.creditmaxposition)
@@ -2603,8 +2606,8 @@ void gamecompleteinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
         }
         game.press_action = true;
     }
-    if (key.isDown(KEYBOARD_ENTER)|| key.isDown(game.controllerButton_map)) game.press_map = true;
-    //if (key.isDown(27)) { game.mapheld = true;  game.menupage = 10; }
+    if (key.isDown(KEYBOARD_ENTER)/*|| key.isDown(game.controllerButton_map)*/) game.press_map = true;
+    //if (key.isDown(SDLK_ESCAPE)) { game.mapheld = true;  game.menupage = 10; }
 
     if (!game.mapheld)
     {
@@ -2633,7 +2636,7 @@ void gamecompleteinput2(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map
     game.press_map = false;
 
 
-    if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v) || key.isDown(game.controllerButton_flip))
+    if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)/* || key.isDown(game.controllerButton_flip)*/)
     {
         game.creditposx++;
         if (game.creditposy >= 30)
@@ -2646,8 +2649,8 @@ void gamecompleteinput2(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map
         }
         game.press_action = true;
     }
-    if (key.isDown(KEYBOARD_ENTER) || key.isDown(game.controllerButton_map)) game.press_map = true;
-    //if (key.isDown(27)) { game.mapheld = true;  game.menupage = 10; }
+    if (key.isDown(KEYBOARD_ENTER) /*|| key.isDown(game.controllerButton_map)*/) game.press_map = true;
+    //if (key.isDown(SDLK_ESCAPE)) { game.mapheld = true;  game.menupage = 10; }
 
     if (!game.mapheld)
     {

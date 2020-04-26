@@ -52,7 +52,7 @@ SDL_Surface* GetSubSurface( SDL_Surface* metaSurface, int x, int y, int width, i
 #endif
 
     //Convert to the correct display format after nabbing the new _surface or we will slow things down.
-    SDL_Surface* preSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, r, g, b, a);
+    SDL_Surface* preSurface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCALPHA, width, height, 32, r, g, b, a);
     //SDL_Surface* subSurface = SDL_DisplayFormatAlpha(preSurface);
 
     //SDL_FreeSurface(preSurface);
@@ -277,10 +277,8 @@ void BlitSurfaceColoured(
     SDL_Rect* _destRect,
     colourTransform& ct
 ) {
-    SDL_Rect *tempRect = _destRect;
 
     const SDL_PixelFormat& fmt = *(_src->format);
-    // const SDL_PixelFormat& destfmt = *(_dest->format);
 
     SDL_Surface* tempsurface =  SDL_CreateRGBSurface(
         SDL_SWSURFACE,
@@ -308,7 +306,7 @@ void BlitSurfaceColoured(
         }
     }
 
-    SDL_BlitSurface(tempsurface, _srcRect, _dest, tempRect);
+    SDL_BlitSurface(tempsurface, _srcRect, _dest, _destRect);
     SDL_FreeSurface(tempsurface);
 }
 
@@ -389,7 +387,7 @@ return _ret;
 
 void FillRect( SDL_Surface* _surface, const int _x, const int _y, const int _w, const int _h, const int r, int g, int b )
 {
-    SDL_Rect rect = {Sint16(_x),Sint16(_y),Sint16(_w),Sint16(_h)};
+    SDL_Rect rect = {Sint16(_x),Sint16(_y),Uint16(_w),Uint16(_h)};
     Uint32 color;
     color = SDL_MapRGB(_surface->format, r, g, b);
     SDL_FillRect(_surface, &rect, color);
@@ -411,7 +409,7 @@ void FillRect( SDL_Surface* _surface, const int color )
 
 void FillRect( SDL_Surface* _surface, const int x, const int y, const int w, const int h, int rgba )
 {
-    SDL_Rect rect = {Sint16(x)  ,Sint16(y) ,Sint16(w) ,Sint16(h) };
+    SDL_Rect rect = {Sint16(x)  ,Sint16(y) ,Uint16(w) ,Uint16(h) };
     SDL_FillRect(_surface, &rect, rgba);
 }
 
@@ -464,7 +462,8 @@ void ScrollSurface( SDL_Surface* _src, int _pX, int _pY )
 
         SDL_Rect destrect1;
 
-        SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
+        //SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
+        SDL_SetAlpha(part1, 0, 0);
 
         setRect(destrect1, 0,  _pY, _pX, _src->h);
 
@@ -480,7 +479,8 @@ void ScrollSurface( SDL_Surface* _src, int _pX, int _pY )
 
         SDL_Rect destrect1;
 
-        SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
+        //SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
+        SDL_SetAlpha(part1, 0, 0);
 
         setRect(destrect1, _pX, _pY, _src->w, _src->h - _pY);
 
@@ -497,7 +497,8 @@ void ScrollSurface( SDL_Surface* _src, int _pX, int _pY )
 
 		SDL_Rect destrect1;
 
-		SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
+		//SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
+        SDL_SetAlpha(part1, 0, 0);
 
 		setRect(destrect1, _pX,  0, _src->w - _pX, _src->h);
 
@@ -513,7 +514,8 @@ void ScrollSurface( SDL_Surface* _src, int _pX, int _pY )
 
 		SDL_Rect destrect1;
 
-		SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
+		//SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
+        SDL_SetAlpha(part1, 0, 0);
 
 		setRect(destrect1, 0, 0, _src->w - _pX, _src->h);
 

@@ -5,6 +5,7 @@
 #include <sstream>
 
 /* Used by UtilityClass::GCString to generate a button list */
+/*
 const char *GCChar(SDL_GameControllerButton button)
 {
 	if (button == SDL_CONTROLLER_BUTTON_A)
@@ -51,9 +52,10 @@ const char *GCChar(SDL_GameControllerButton button)
 	{
 		return "RB";
 	}
-	SDL_assert(0 && "Unhandled button!");
+	assert(0 && "Unhandled button!");
 	return NULL;
 }
+*/
 
 int ss_toi( std::string _s )
 {
@@ -102,6 +104,7 @@ std::string UtilityClass::String( int _v )
 	return(os.str());
 }
 
+/*
 std::string UtilityClass::GCString(std::vector<SDL_GameControllerButton> buttons)
 {
 	std::string retval = "";
@@ -115,6 +118,7 @@ std::string UtilityClass::GCString(std::vector<SDL_GameControllerButton> buttons
 	}
 	return retval;
 }
+*/
 
 std::string UtilityClass::twodigits( int t )
 {
@@ -191,7 +195,19 @@ std::string UtilityClass::number( int _t )
 
 bool UtilityClass::intersects( SDL_Rect A, SDL_Rect B )
 {
-	return (SDL_HasIntersection(&A, &B) == SDL_TRUE);
+	//Calculate the sides of rect A
+	int left1 = A.x;
+	int right1 = A.x + A.w;
+	int top1 = A.y;
+	int bottom1 = A.y + A.h;
+
+	//Calculate the sides of rect B
+	int left2 = B.x;
+	int right2 = B.x + B.w;
+	int top2 = B.y;
+	int bottom2 = B.y + B.h;
+
+	return (bottom1 > top2 && top1 < bottom2 && right1 > left2 && left1 < right2);
 }
 
 void UtilityClass::updateglow()

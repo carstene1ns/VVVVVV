@@ -617,7 +617,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					game.advancetext = true;
 					game.hascontrol = false;
 					game.pausescript = true;
-					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+					if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
 						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
 				}
 				game.backgroundtext = false;
@@ -662,7 +662,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					game.advancetext = true;
 					game.hascontrol = false;
 					game.pausescript = true;
-					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+					if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
 						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
 				}
 				game.backgroundtext = false;
@@ -1911,7 +1911,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					game.advancetext = true;
 					game.hascontrol = false;
 					game.pausescript = true;
-					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+					if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
 						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
 				}
 				game.backgroundtext = false;
@@ -1933,7 +1933,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					game.advancetext = true;
 					game.hascontrol = false;
 					game.pausescript = true;
-					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+					if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
 						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
 				}
 				game.backgroundtext = false;
@@ -1955,7 +1955,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 					game.advancetext = true;
 					game.hascontrol = false;
 					game.pausescript = true;
-					if (key.isDown(90) || key.isDown(32) || key.isDown(86)
+					if (key.isDown(KEYBOARD_z) || key.isDown(KEYBOARD_SPACE) || key.isDown(KEYBOARD_v)
 						|| key.isDown(KEYBOARD_UP) || key.isDown(KEYBOARD_DOWN)) game.jumpheld = true;
 				}
 				game.backgroundtext = false;

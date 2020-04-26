@@ -29,6 +29,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef GEKKO
+#include <fat.h>
+#endif
+
 scriptclass script;
 
 #if !defined(NO_CUSTOM_LEVELS)
@@ -50,10 +54,10 @@ int main(int argc, char *argv[])
     char* assetsPath = NULL;
 
     for (int i = 1; i < argc; ++i) {
-        if (strcmp(argv[i], "-renderer") == 0) {
+        /*if (strcmp(argv[i], "-renderer") == 0) {
             ++i;
             SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argv[i], SDL_HINT_OVERRIDE);
-        } else if (strcmp(argv[i], "-basedir") == 0) {
+        } else*/ if (strcmp(argv[i], "-basedir") == 0) {
             ++i;
             baseDir = argv[i];
         } else if (strcmp(argv[i], "-assets") == 0) {
@@ -62,7 +66,13 @@ int main(int argc, char *argv[])
         }
     }
 
+#ifdef GEKKO
+    fatInitDefault();
+
+    if(!FILESYSTEM_init("sd:/", baseDir, assetsPath))
+#else
     if(!FILESYSTEM_init(argv[0], baseDir, assetsPath))
+#endif
     {
         return 1;
     }
@@ -70,8 +80,7 @@ int main(int argc, char *argv[])
     SDL_Init(
         SDL_INIT_VIDEO |
         SDL_INIT_AUDIO |
-        SDL_INIT_JOYSTICK |
-        SDL_INIT_GAMECONTROLLER
+        SDL_INIT_JOYSTICK
     );
 
     NETWORK_init();
@@ -110,16 +119,12 @@ int main(int argc, char *argv[])
     //Set up screen
 
 
-
-
     //UtilityClass help;
     // Load Ini
 
 
     //Graphics graphics;
     graphics.init();
-
-
 
     //musicclass music;
     music.init();
@@ -147,29 +152,34 @@ int main(int argc, char *argv[])
     graphics.images.push_back(graphics.grphx.im_image11);
     graphics.images.push_back(graphics.grphx.im_image12);
 
-    const SDL_PixelFormat* fmt = gameScreen.GetFormat();
-    graphics.backBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,32,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask ) ;
-    SDL_SetSurfaceBlendMode(graphics.backBuffer, SDL_BLENDMODE_NONE);
-    graphics.footerbuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 10, 32, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
-    SDL_SetSurfaceBlendMode(graphics.footerbuffer, SDL_BLENDMODE_BLEND);
-    SDL_SetSurfaceAlphaMod(graphics.footerbuffer, 127);
+    SDL_PixelFormat* fmt = gameScreen.GetFormat();
+    graphics.backBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask, fmt->Amask);
+    //SDL_SetSurfaceBlendMode(graphics.backBuffer, SDL_BLENDMODE_NONE);
+    SDL_SetAlpha(graphics.backBuffer, 0, 0);
+
+    graphics.footerbuffer = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCALPHA, 320, 10, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+    //SDL_SetSurfaceBlendMode(graphics.footerbuffer, SDL_BLENDMODE_BLEND);
+    SDL_SetAlpha(graphics.footerbuffer, SDL_SRCALPHA, 128);
     FillRect(graphics.footerbuffer, SDL_MapRGB(fmt, 0, 0, 0));
     graphics.Makebfont();
 
-
     graphics.foregroundBuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
-    SDL_SetSurfaceBlendMode(graphics.foregroundBuffer, SDL_BLENDMODE_NONE);
+    //SDL_SetSurfaceBlendMode(graphics.foregroundBuffer, SDL_BLENDMODE_NONE);
+    SDL_SetAlpha(graphics.foregroundBuffer, 0, 0);
 
     graphics.screenbuffer = &gameScreen;
 
     graphics.menubuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask );
-    SDL_SetSurfaceBlendMode(graphics.menubuffer, SDL_BLENDMODE_NONE);
+    //SDL_SetSurfaceBlendMode(graphics.menubuffer, SDL_BLENDMODE_NONE);
+    SDL_SetAlpha(graphics.menubuffer, 0, 0);
 
     graphics.towerbuffer =  SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
-    SDL_SetSurfaceBlendMode(graphics.towerbuffer, SDL_BLENDMODE_NONE);
+    //SDL_SetSurfaceBlendMode(graphics.towerbuffer, SDL_BLENDMODE_NONE);
+    SDL_SetAlpha(graphics.towerbuffer, 0, 0);
 
 	graphics.tempBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE ,320 ,240 ,fmt->BitsPerPixel,fmt->Rmask,fmt->Gmask,fmt->Bmask,fmt->Amask  );
-    SDL_SetSurfaceBlendMode(graphics.tempBuffer, SDL_BLENDMODE_NONE);
+    //SDL_SetSurfaceBlendMode(graphics.tempBuffer, SDL_BLENDMODE_NONE);
+    SDL_SetAlpha(graphics.tempBuffer, 0, 0);
 
     //Make a temporary rectangle to hold the offsets
     // SDL_Rect offset;
@@ -177,9 +187,9 @@ int main(int argc, char *argv[])
     // offset.x = 60;
     // offset.y = 80;
 
-    //game.gamestate = TITLEMODE;
+    game.gamestate = TITLEMODE;
     //game.gamestate=EDITORMODE;
-    game.gamestate = PRELOADER; //Remember to uncomment this later!
+    //game.gamestate = PRELOADER; //Remember to uncomment this later!
 
     game.menustart = false;
     game.mainmenu = 0;
